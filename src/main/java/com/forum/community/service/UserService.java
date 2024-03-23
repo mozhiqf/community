@@ -166,4 +166,8 @@ public class UserService {
     public LoginTicket findLoginTicket(String ticket) {
         return loginTicketMapper.selectByTicket(ticket);
     }
+
+    public void updateHeader(int id, String headerUrl) {
+        userMapper.updateHeader(id, headerUrl);
+    }
 }
