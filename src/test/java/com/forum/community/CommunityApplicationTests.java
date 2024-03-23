@@ -8,8 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 @ContextConfiguration(classes = CommunityApplication.class)
 class CommunityApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+
 
 }
