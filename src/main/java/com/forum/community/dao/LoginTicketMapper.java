@@ -13,7 +13,7 @@ public interface LoginTicketMapper {
     public int insertLoginTicket(LoginTicket loginTicket);
 
     @Select({
-            "select id,user_id,ticket,status,expired ",
+            "select id,user_id,ticket,status,expired " +
             "from login_ticket where ticket=#{ticket}"
     })
     @Options(useGeneratedKeys = true, keyProperty = "id")
