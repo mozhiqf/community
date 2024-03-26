@@ -2,9 +2,11 @@ package com.forum.community;
 
 import com.forum.community.dao.DiscussPostMapper;
 import com.forum.community.dao.LoginTicketMapper;
+import com.forum.community.dao.MessageMapper;
 import com.forum.community.dao.UserMapper;
 import com.forum.community.entity.DiscussPost;
 import com.forum.community.entity.LoginTicket;
+import com.forum.community.entity.Message;
 import com.forum.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +31,8 @@ public class MapperTests {
 
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+    @Autowired
+    private MessageMapper messageMapper;
 
     @Test
     public void testSelectUser() {
@@ -99,6 +103,22 @@ public class MapperTests {
         loginTicketMapper.updateStatus("abc", 1);
         loginTicket = loginTicketMapper.selectByTicket("abc");
         System.out.println(loginTicket);
+    }
+
+    @Test
+    public void testSelectLetters() {
+        List<Message> messages = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : messages) {
+            System.out.println(message);
+        }
+        System.out.println("===================================================");
+        System.out.println(messageMapper.selectConversationCount(111));
+        System.out.println("===================================================");
+        for (Message letter : messageMapper.selectLetters("111_112", 0, 10)) {
+            System.out.println(letter);
+        }
+        System.out.println("===================================================");
+        System.out.println(messageMapper.selectLetterCount("111_112"));
     }
 
 }
