@@ -1,6 +1,7 @@
 package com.forum.community.controller;
 
 import com.forum.community.service.DiscussPostService;
+import com.forum.community.service.LikeService;
 import com.forum.community.service.UserService;
 import com.forum.community.entity.DiscussPost;
 import com.forum.community.entity.Page;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.forum.community.util.CommunityConstant.ENTITY_TYPE_POST;
+
 @Controller
 public class HomeController {
 
@@ -24,6 +27,9 @@ public class HomeController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String getRootPage(Model model, Page page) {
@@ -45,6 +51,9 @@ public class HomeController {
                 map.put("post", post);
                 User user = userService.findUserById(post.getUserId());
                 map.put("user", user);
+
+                long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+                map.put("likeCount", likeCount);
                 discussPosts.add(map);
             }
         }

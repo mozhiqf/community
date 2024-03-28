@@ -6,11 +6,10 @@ import com.forum.community.entity.Page;
 import com.forum.community.entity.User;
 import com.forum.community.service.CommentService;
 import com.forum.community.service.DiscussPostService;
+import com.forum.community.service.LikeService;
 import com.forum.community.service.UserService;
 import com.forum.community.util.CommunityUtil;
 import com.forum.community.util.HostHolder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +36,9 @@ public class DiscussPostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
@@ -65,6 +67,13 @@ public class DiscussPostController {
         User user = userService.findUserById(post.getUserId());
         model.addAttribute("user", user);
 
+        //帖子的点赞
+        long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeCount", likeCount);
+        int likeStatus = hostHolder.getUser() == null ? 0 :
+                likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_POST, discussPostId);
+        model.addAttribute("likeStatus", likeStatus);
+
         //评论
         page.setLimit(5);
         page.setPath("/discuss/detail/" + discussPostId);
@@ -80,6 +89,9 @@ public class DiscussPostController {
                 Map<String, Object> commentAttributes = new HashMap<>();
                 commentAttributes.put("comment", comment);
                 commentAttributes.put("user", userService.findUserById(comment.getUserId()));
+
+                like(comment, commentAttributes);
+
                 //该评论的回复
                 List<Comment> replys = commentService.findCommentByEntity(
                         ENTITY_TYPE_COMMENT, comment.getId(), 0, Integer.MAX_VALUE);
@@ -89,6 +101,9 @@ public class DiscussPostController {
                         Map<String, Object> replyAttributes = new HashMap<>();
                         replyAttributes.put("reply", reply);
                         replyAttributes.put("user", userService.findUserById(reply.getUserId()));
+
+                        like(reply, replyAttributes);
+
                         //回复的目标
                         User target = reply.getTargetId() == 0 ? null : userService.findUserById(reply.getTargetId());
                         replyAttributes.put("target", target);
@@ -105,6 +120,16 @@ public class DiscussPostController {
             model.addAttribute("comments", commentList);
         }
         return "/site/discuss-detail";
+    }
+
+    private void like(Comment reply, Map<String, Object> replyAttributes) {
+        long likeCount;
+        int likeStatus;
+        likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_COMMENT, reply.getId());
+        replyAttributes.put("likeCount", likeCount);
+        likeStatus = hostHolder.getUser() == null ? 0 :
+                likeService.findEntityLikeStatus(hostHolder.getUser().getId(), ENTITY_TYPE_COMMENT, reply.getId());
+        replyAttributes.put("likeStatus", likeStatus);
     }
 
 }

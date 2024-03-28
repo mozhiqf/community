@@ -8,10 +8,12 @@ import com.forum.community.entity.DiscussPost;
 import com.forum.community.entity.LoginTicket;
 import com.forum.community.entity.Message;
 import com.forum.community.entity.User;
+import com.forum.community.util.RedisKeyUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -33,6 +35,8 @@ public class MapperTests {
     private LoginTicketMapper loginTicketMapper;
     @Autowired
     private MessageMapper messageMapper;
+    @Autowired
+    private RedisTemplate RedisTemplate;
 
     @Test
     public void testSelectUser() {
@@ -119,6 +123,20 @@ public class MapperTests {
         }
         System.out.println("===================================================");
         System.out.println(messageMapper.selectLetterCount("111_112"));
+    }
+
+    @Test
+    public void RedisTest() {
+        int userId = 123;
+        int entityType = 1;
+        int entityId = 213;
+        String entityLikeKey = RedisKeyUtil.getEntityLikeKey(entityType, entityId);
+        Boolean isMember = RedisTemplate.opsForSet().isMember(entityLikeKey, userId);
+        if (isMember) {
+            RedisTemplate.opsForSet().remove(entityLikeKey, userId);
+        } else {
+            RedisTemplate.opsForSet().add(entityLikeKey, userId);
+        }
     }
 
 }
