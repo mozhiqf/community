@@ -1,5 +1,6 @@
 package com.forum.community.controller;
 
+import com.forum.community.annotation.LoginRequired;
 import com.forum.community.entity.User;
 import com.forum.community.service.LikeService;
 import com.forum.community.util.CommunityUtil;
@@ -23,10 +24,11 @@ public class LikeController {
 
     @RequestMapping(path = "/like", method = RequestMethod.POST)
     @ResponseBody
-    public String like(int entityType, int entityId) {
+    @LoginRequired
+    public String like(int entityType, int entityId, int entityUserId) {
         User user = hostHolder.getUser();
 
-        likeService.like(user.getId(), entityType, entityId);
+        likeService.like(user.getId(), entityType, entityId, entityUserId);
 
         long likeCount = likeService.findEntityLikeCount(entityType, entityId);
 
