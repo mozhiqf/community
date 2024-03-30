@@ -4,6 +4,7 @@ import com.forum.community.entity.LoginTicket;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
+@Deprecated
 public interface LoginTicketMapper {
 
     @Insert({
@@ -14,7 +15,7 @@ public interface LoginTicketMapper {
 
     @Select({
             "select id,user_id,ticket,status,expired " +
-            "from login_ticket where ticket=#{ticket}"
+                    "from login_ticket where ticket=#{ticket}"
     })
     @Options(useGeneratedKeys = true, keyProperty = "id")
     LoginTicket selectByTicket(String ticket);
