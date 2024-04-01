@@ -13,8 +13,10 @@ public interface CommentMapper {
             @Param("entityId") int entityId,
             @Param("offset") int offset,
             @Param("limit") int limit);
+
     int selectCountByEntity(@Param("entityType") int entityType, @Param("entityId") int entityId);
 
     int insertComment(Comment comment);
+
+    Comment findCommentById(@Param("id") int id);
 }
-//arg1,arg2

@@ -1,10 +1,13 @@
 package com.forum.community.controller;
 
 import com.forum.community.annotation.LoginRequired;
+import com.forum.community.entity.Event;
 import com.forum.community.entity.Page;
 import com.forum.community.entity.User;
+import com.forum.community.event.EventProducer;
 import com.forum.community.service.FollowService;
 import com.forum.community.service.UserService;
+import com.forum.community.util.CommunityConstant;
 import com.forum.community.util.CommunityUtil;
 import com.forum.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 
-import static com.forum.community.util.CommunityConstant.ENTITY_TYPE_USER;
-
 @Controller
-public class FollowController {
+public class FollowController implements CommunityConstant {
     @Autowired
     private FollowService followService;
 
@@ -31,6 +32,9 @@ public class FollowController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(path = "/follow", method = RequestMethod.POST)
     @ResponseBody
     @LoginRequired
@@ -38,6 +42,14 @@ public class FollowController {
         User user = hostHolder.getUser();
 
         followService.follow(user.getId(), entityType, entityId);
+
+        Event event = new Event();
+        event.setTopic(TOPIC_FOLLOW)
+                .setUserId(user.getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0, "已关注");
     }

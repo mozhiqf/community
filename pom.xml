@@ -28,6 +28,13 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/com.github.penggle/kaptcha -->
         <dependency>
             <groupId>com.github.penggle</groupId>
