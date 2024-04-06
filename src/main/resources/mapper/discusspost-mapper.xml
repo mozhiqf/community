@@ -12,7 +12,9 @@
         user_id, title, content, type, status, create_time, comment_count, score
     </sql>
     <update id="updateCommentCount">
-        update discuss_post set comment_count=#{commentCount} where id = #{id}
+        update discuss_post
+        set comment_count=#{commentCount}
+        where id = #{id}
     </update>
 
     <select id="selectDiscussPosts" resultType="DiscussPost">
@@ -43,7 +45,7 @@
     </select>
 
 
-    <insert id="insertDiscussPost" parameterType="DiscussPost">
+    <insert id="insertDiscussPost" parameterType="DiscussPost" keyProperty="id">
         insert into discuss_post(<include refid="insertFields"></include>)
         values(#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
     </insert>

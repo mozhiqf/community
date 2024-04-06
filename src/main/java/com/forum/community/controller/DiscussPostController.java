@@ -1,13 +1,12 @@
 package com.forum.community.controller;
 
-import com.forum.community.entity.Comment;
-import com.forum.community.entity.DiscussPost;
-import com.forum.community.entity.Page;
-import com.forum.community.entity.User;
+import com.forum.community.entity.*;
+import com.forum.community.event.EventProducer;
 import com.forum.community.service.CommentService;
 import com.forum.community.service.DiscussPostService;
 import com.forum.community.service.LikeService;
 import com.forum.community.service.UserService;
+import com.forum.community.util.CommunityConstant;
 import com.forum.community.util.CommunityUtil;
 import com.forum.community.util.HostHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import static com.forum.community.util.CommunityConstant.ENTITY_TYPE_POST;
 
 @Controller
 @RequestMapping("/discuss")
-public class DiscussPostController {
+public class DiscussPostController implements CommunityConstant {
 
 
     @Autowired
@@ -40,6 +39,9 @@ public class DiscussPostController {
     @Autowired
     private LikeService likeService;
 
+    @Autowired
+    private EventProducer eventProducer;
+
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
     public String addDiscussPost(String title, String content) {
@@ -54,6 +56,13 @@ public class DiscussPostController {
         post.setCreateTime(new Date());
 
         discussPostService.addDiscussPost(post);
+        //触发发帖事件
+        Event event = new Event().setTopic(TOPIC_PUBLISH)
+                .setUserId(user.getId())
+                .setEntityType(ENTITY_TYPE_POST)
+                .setEntityId(post.getId());
+
+        eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0, "发布成功");
     }
