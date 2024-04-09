@@ -1,8 +1,11 @@
 package com.forum.community.config;
 
 import com.forum.community.config.filter.CustomAuthenticationFilter;
+import com.forum.community.quartz.PostScoreRefreshJob;
 import com.forum.community.util.CommunityConstant;
 import com.forum.community.util.CommunityUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,6 +25,8 @@ import java.io.PrintWriter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements CommunityConstant {
+
+    private static Logger logger = LoggerFactory.getLogger(PostScoreRefreshJob.class);
 
     @Autowired
     private CustomAuthenticationFilter customAuthenticationFilter;

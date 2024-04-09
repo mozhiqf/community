@@ -26,6 +26,11 @@
         set status = #{status}
         where id = #{id}
     </update>
+    <update id="updateScore">
+        update discuss_post
+        set score = #{score}
+        where id = #{id}
+    </update>
 
     <select id="selectDiscussPosts" resultType="DiscussPost">
         select
@@ -52,6 +57,17 @@
         <include refid="selectFields"></include>
         from discuss_post
         where id=#{id}
+    </select>
+    <select id="selectDiscussPostsSortedByScore" resultType="com.forum.community.entity.DiscussPost">
+        select
+        <include refid="selectFields"/>
+        from discuss_post
+        where status != 2 #拉黑用户不可见
+        <if test="userId!=0">
+            and user_id = #{userId}
+        </if>
+        order by type desc, score desc
+        limit #{offset}, #{limit}
     </select>
 
 
