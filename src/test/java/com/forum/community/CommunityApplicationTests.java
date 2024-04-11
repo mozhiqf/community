@@ -1,5 +1,6 @@
 package com.forum.community;
 
+import com.forum.community.util.AliOssProperties;
 import com.forum.community.util.SensitiveFilter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +25,15 @@ class CommunityApplicationTests {
         System.out.println(text);
     }
 
+    @Autowired
+    private AliOssProperties aliOssProperties;
+
+    @Test
+    public void testProperties() {
+        System.out.println(aliOssProperties.getEndpoint());
+        System.out.println(aliOssProperties.getAccessKeyId());
+        System.out.println(aliOssProperties.getAccessKeySecret());
+        System.out.println(aliOssProperties.getBucketNameShare());
+        System.out.println(aliOssProperties.getBucketNameHeader());
+    }
 }

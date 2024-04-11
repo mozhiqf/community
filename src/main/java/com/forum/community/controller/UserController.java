@@ -1,11 +1,15 @@
 package com.forum.community.controller;
 
 
+import com.alibaba.fastjson2.JSONObject;
 import com.forum.community.annotation.LoginRequired;
+import com.forum.community.config.OssConfig;
 import com.forum.community.entity.User;
 import com.forum.community.service.FollowService;
 import com.forum.community.service.LikeService;
 import com.forum.community.service.UserService;
+import com.forum.community.util.AliOssProperties;
+import com.forum.community.util.AliOssUtil;
 import com.forum.community.util.CommunityUtil;
 import com.forum.community.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -16,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import static com.forum.community.util.CommunityConstant.ENTITY_TYPE_USER;
 
@@ -56,13 +59,37 @@ public class UserController {
     @Autowired
     private FollowService followService;
 
-    @LoginRequired
+    @Autowired
+    private OssConfig ossConfig;
+    @Autowired
+    private AliOssProperties aliOssProperties;
+
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
-    public String getSettingPage() {
+    public String getSettingPage(Model model) {
+        AliOssUtil aliOssUtil = ossConfig.aliOssUtil(aliOssProperties);
+        int userId = hostHolder.getUser().getId();
+        JSONObject response = aliOssUtil.generatePostSignature(2, userId);
+
+        model.addAttribute("signature", response.toString());
+
         return "/site/setting";
     }
 
-    @LoginRequired
+    //https://mzqf-forum-header.oss-cn-beijing.aliyuncs.com/header/test.txt
+    // 更新头像路径
+    @RequestMapping(path = "/header/url", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateHeaderUrl(@RequestBody Map<String, String> payload) {
+        String url = payload.get("fileName");
+        if (StringUtils.isBlank(url)) {
+            return CommunityUtil.getJSONString(1, "文件名不能为空!");
+        }
+
+        userService.updateHeader(hostHolder.getUser().getId(), url);
+
+        return CommunityUtil.getJSONString(0);
+    }
+
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
         if (headerImage == null) {
