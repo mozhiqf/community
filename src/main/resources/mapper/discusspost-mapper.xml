@@ -36,7 +36,7 @@
         select
         <include refid="selectFields"></include>
         from discuss_post
-        where status != 2 #拉黑用户不可见
+        where status != 2 #被删除的帖子不可见
         <if test="userId!=0">
             and user_id = #{userId}
         </if>
