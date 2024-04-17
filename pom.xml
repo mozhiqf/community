@@ -7,6 +7,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>community</name>
     <description>eForum community</description>
+    <packaging>war</packaging>
+
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,7 +27,21 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+<!--打包成war包了，那么打包的时候就不需要内嵌web容器了，要排除掉-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+<!--打包的时候不需要打包了，但项目开发的时候还是需要使用到了，所以需要重新添加进来，并且将scope设置为provided：-->
+<!--provided表示已提供，即打包期间不需要该依赖，该依赖会由其他依赖或容器会提供，避免依赖冲突-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
@@ -183,6 +199,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>ROOT</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -194,22 +211,31 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <version>${spring-boot.version}</version>-->
+<!--                <configuration>-->
+<!--                    <mainClass>com.forum.community.CommunityApplication</mainClass>-->
+<!--                    <skip>true</skip>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>repackage</id>-->
+<!--                        <goals>-->
+<!--                            <goal>repackage</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.3</version>
                 <configuration>
-                    <mainClass>com.forum.community.CommunityApplication</mainClass>
-                    <skip>true</skip>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

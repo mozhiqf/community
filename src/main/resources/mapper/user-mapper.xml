@@ -13,38 +13,48 @@
     </sql>
 
     <select id="selectById" resultType="User">
-        select <include refid="selectFields"></include>
+        select
+        <include refid="selectFields"></include>
         from user
         where id = #{id}
     </select>
 
     <select id="selectByName" resultType="User">
-        select <include refid="selectFields"></include>
+        select
+        <include refid="selectFields"></include>
         from user
         where username = #{username}
     </select>
 
     <select id="selectByEmail" resultType="User">
-        select <include refid="selectFields"></include>
+        select
+        <include refid="selectFields"></include>
         from user
         where email = #{email}
     </select>
 
-    <insert id="insertUser" parameterType="User" keyProperty="id">
-        insert into user (<include refid="insertFields"></include>)
-        values(#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl}, #{createTime})
+    <insert id="insertUser" parameterType="com.forum.community.entity.User" keyProperty="id">
+    insert into user (username, password, salt, email, type, status, activation_code, header_url, create_time)
+    values (#{user.username}, #{user.password}, #{user.salt}, #{user.email}, #{user.type}, #{user.status}, #{user.activationCode}, #{user.headerUrl}, #{user.createTime})
     </insert>
 
+
     <update id="updateStatus">
-        update user set status = #{status} where id = #{id}
+        update user
+        set status = #{status}
+        where id = #{id}
     </update>
 
     <update id="updateHeader">
-        update user set header_url = #{headerUrl} where id = #{id}
+        update user
+        set header_url = #{headerUrl}
+        where id = #{id}
     </update>
 
     <update id="updatePassword">
-        update user set password = #{password} where id = #{id}
+        update user
+        set password = #{password}
+        where id = #{id}
     </update>
 
 </mapper>

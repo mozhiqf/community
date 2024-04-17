@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('data.fileName', data.fileName);
         console.log('data.ossAccessKeyId:', data.ossAccessKeyId);
         console.log('data.policy:', data.policy);
-        console.log('data.signature:',data.signature);
+        console.log('data.signature:', data.signature);
         console.log('data.host:', data.host);
         // 使用fetch API上传文件到OSS
         fetch(data.host, {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //https://mzqf-forum-header.oss-cn-beijing.aliyuncs.com/header/test.txt
                 let fullFilePath = `${data.host}/${data.dir}${data.fileName}`;
                 // 发起异步请求到后端更新头像URL
-                return fetch('/community/user/header/url', {
+                return fetch(CONTEXT_PATH + '/user/header/url', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
