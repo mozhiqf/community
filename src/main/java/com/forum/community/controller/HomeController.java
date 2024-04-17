@@ -34,7 +34,7 @@ public class HomeController {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String getRootPage(Model model, Page page) {
-        return "redirect:/index";
+        return "forward:/index";
     }
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
