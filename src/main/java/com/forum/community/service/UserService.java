@@ -134,7 +134,7 @@ public class UserService {
         if (user.getStatus() == 1) {
             return ACTIVATION_REPEAT;
         } else if (user.getActivationCode().equals(code)) {
-            /*            userMapper.updateStatus(userId, 1);*/
+            userMapper.updateStatus(userId, 1);
             clearCache(userId);
             return ACTIVATION_SUCCESS;
         } else {

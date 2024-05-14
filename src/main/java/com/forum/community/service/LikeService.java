@@ -15,6 +15,7 @@ public class LikeService {
 
     //点赞
     public void like(int userId, int entityType, int entityId, int entityUserId) {
+
         redisTemplate.execute(new SessionCallback() {
             @Override
             public Object execute(RedisOperations operations) throws DataAccessException {
