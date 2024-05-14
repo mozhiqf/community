@@ -3,11 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
 	<link rel="stylesheet" th:href="@{/css/discuss-detail.css}" />
-	<title>牛客网-帖子详情</title>
+	<title>帖子详情</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -97,7 +96,7 @@
 							</ul>
 						</div>
 					</div>
-				</div>	
+				</div>
 				<!-- 正文 -->
 				<div class="mt-4 mb-3 content" th:utext="${post.content}">
 					金三银四的金三已经到了，你还沉浸在过年的喜悦中吗？
@@ -185,7 +184,7 @@
 												</div>
 											</form>
 										</div>
-									</div>								
+									</div>
 								</li>
 
 								<!-- 回复输入框 -->
@@ -218,7 +217,7 @@
 						<li class="page-item"><a class="page-link" href="#">下一页</a></li>
 						<li class="page-item"><a class="page-link" href="#">末页</a></li>
 					</ul>
-				</nav>			
+				</nav>
 			</div>
 			<!-- 回帖输入 -->
 			<div class="container mt-3">
@@ -237,7 +236,7 @@
 		</div>
 
 		<!-- 尾部 -->
-		<footer class="bg-dark">
+		<footer class="bg-dark" th:replace="index::footer">
 			<div class="container">
 				<div class="row">
 					<!-- 二维码 -->

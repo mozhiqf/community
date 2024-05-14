@@ -1,9 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<!-- 新 Bootstrap4 核心 CSS 文件 -->
 	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
 
@@ -15,10 +14,10 @@
 
 	<!-- 最新的 Bootstrap4 核心 JavaScript 文件 -->
 	<script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>	<link rel="stylesheet" href="../css/global.css" />
-	<title>牛客网-个人主页</title>
+	<title>个人主页</title>
 </head>
 <body>
-	<div class="nk-container">
+	<div class="nk-container" th:fragment="header">
 		<!-- 头部 -->
 		<header class="bg-dark sticky-top">
 			<div class="container">
@@ -219,7 +218,7 @@
 		</div>
 
 		<!-- 尾部 -->
-		<footer class="bg-dark">
+		<footer class="bg-dark" th:replace="index::footer">
 			<div class="container">
 				<div class="row">
 					<!-- 二维码 -->
